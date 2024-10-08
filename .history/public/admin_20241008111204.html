@@ -22,16 +22,12 @@
                     <td>${user.firstName}</td>
                     <td>${user.lastName}</td>
                     <td>
-                      <div class="toggle switch">
-                        <input type="checkbox" class="status-toggle" data-id="${
+                      <label class="toggle switch">
+                        <input type= "checkbox" class="status-toggle" data-id="${
                           user.id
                         }" ${user.state === "active" ? "checked" : ""}>
                         <span class="slider"></span>
-                        </div>
-                        <div class="toggle-labels">
-                          <span>Pending</span>
-                          <span>Active</span>
-                          </div>
+                        </label>
                       </td>
                     <td><button class="delete" data-id="${
                       user.id
@@ -64,9 +60,11 @@
           });
         });
         //Handle toggle status button
-        $("#userTable").on("change", ".status-toggle", function () {
+        $("#userTable").on("click", ".toggle-status", function () {
           var userId = $(this).data("id");
-          var newStatus = this.checked ? "active" : "pending";
+          var userStatusElem = $(this).siblings(".user-status");
+          var currentStatus = userStatusElem.text();
+          var newStatus = currentStatus === "active" ? "pending" : "active";
 
           $.ajax({
             type: "PUT",
@@ -74,12 +72,12 @@
             contentType: "application/json",
             data: JSON.stringify({ id: userId, state: newStatus }),
             success: function (updatedUser) {
-              alert("User status updated to " + newStatus); // update the status displayed
+              userStatusElem.text(updatedUser.state); // update the status displayed
+              alert("User status updated to " + newStatus);
             },
             error: function (err) {
               alert("Error updating user status: " + err.responseJSON.message);
-              $(this).prop("checked", !this.checked);
-            }.bind(this),
+            },
           });
         });
       });
