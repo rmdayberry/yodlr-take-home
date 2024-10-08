@@ -40,7 +40,7 @@
           var userId = $(this).data("id");
           $.ajax({
             type: "DELETE",
-            url: `http://localhost:3000/users/${userId}`,
+            url: "http://localhost:3000/users/${userId}",
             success: function () {
               alert("User was deleted");
               loadUsers(); // reloads users after deletion was made

@@ -9,12 +9,12 @@
         function loadUsers() {
           $.ajax({
             type: "GET",
-            url: "http://localhost:3000/users",
+            url: "https://localhost:3000/users",
             success: function (users) {
               var tableBody = $("#userTable tbody");
               tableBody.empty(); // clear the table before adding new rows
 
-              users.forEach(function (user) {
+              user.forEach(function (user) {
                 tableBody.append(
                   `<tr>
                     <td>${user.id}</td>
@@ -36,11 +36,11 @@
         loadUsers(); //loads users on page load
 
         //Handle delete button click
-        $("#userTable").on("click", ".delete", function () {
+        $("#userTable").on("clcik", ".delete", function () {
           var userId = $(this).data("id");
           $.ajax({
             type: "DELETE",
-            url: `http://localhost:3000/users/${userId}`,
+            url: "http://localhost:3000/users/${userId}",
             success: function () {
               alert("User was deleted");
               loadUsers(); // reloads users after deletion was made
