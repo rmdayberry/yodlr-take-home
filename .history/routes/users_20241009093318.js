@@ -16,12 +16,12 @@ router.get("/", function (req, res) {
 router.post("/", function (req, res) {
   var user = req.body;
   user.id = curId++;
-  if (!user.status) {
-    user.status = "pending";
+  if (!user.state) {
+    user.state = "pending";
   }
-  users.push(user);
+  users[user.id] = user;
   log.info("Created user", user);
-  res.status(201).json(user);
+  res.json(user);
 });
 
 /* Get a specific user by id */

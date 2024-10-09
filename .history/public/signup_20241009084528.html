@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8>
+  <title>Yodlr Registration Portal</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/signup.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>$(document).ready(function() {
+      $('form').on('submit', function(e){
+        e.preventDefault();
+        const email = $('input[name="email"]').val();
+        const firstName= $('input[name="firstName"]').val();
+        const lastName= $('input[name="lastName"]').val();
+
+        //Post user data to server
+        $.ajax({
+          type: 'POST',
+          url: 'http://localhost:3000/users',
+          data: JSON.stringify({email: email, firstName: firstName, lastName: lastName}),
+          contentType: 'application/json',
+          success: function(response){
+            alert('User registered sucessfully: ' + JSON.stringify(response));
+            $('form')[0].reset(); //form clear 
+          },
+          error: function(err) {
+            alert('Error registering user: ' + err.responseJSON.message);
+          }
+        });
+      });
+    });
+      </script>
+</head>
+<body>
+  <h1>Yodlr Registration Portal</h1>
+  <form>
+    Email: <input type="email" name="email" required></br>
+    First Name: <input type="text" name="firstName" required></br>
+    Last Name: <input type="text" name="lastName" required></br>
+    <button type="submit">Submit</button>
+  </form>
+  <p>
+    <a href="/admin.html">Admin Page</a>
+  </p>
+</body>
+</html>

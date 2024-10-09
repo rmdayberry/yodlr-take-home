@@ -16,12 +16,12 @@ router.get("/", function (req, res) {
 router.post("/", function (req, res) {
   var user = req.body;
   user.id = curId++;
-  if (!user.status) {
-    user.status = "pending";
+  if (!user.state) {
+    user.state = "pending";
   }
-  users.push(user);
+  users[user.id] = user;
   log.info("Created user", user);
-  res.status(201).json(user);
+  res.json(user);
 });
 
 /* Get a specific user by id */
@@ -35,15 +35,11 @@ router.get("/:id", function (req, res, next) {
 
 /* Delete a user by id */
 router.delete("/:id", function (req, res) {
-  var userId = parseInt(req.params.id);
-  var index = users.findIndex((u) => u.id === userId);
-  if (index === -1) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  var deleteUser = users.splice(index, 1)[0];
-  log.info("Deleted user", deleteUser);
-  res.status(204).send();
+  var user = users[req.params.id];
+  delete users[req.params.id];
+  res.status(204);
+  log.info("Deleted user", user);
+  res.json(user);
 });
 
 /* Update a user by id */
