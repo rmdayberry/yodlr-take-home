@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Yodlr Admin Page</title>
+    <link rel="stylesheet" href="../css/admin.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        function loadUsers() {
+          $.ajax({
+            type: "GET",
+            url: "http://localhost:3000/users",
+            success: function (users) {
+              var tableBody = $("#userTable tbody");
+              tableBody.empty(); // clear the table before adding new rows
+
+              users.forEach(function (user) {
+                tableBody.append(
+                  `<tr>
+                    <td>${user.id}</td>
+                    <td>${user.email}</td>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>
+                      <div class="toggle switch">
+                        <input type="checkbox" class="status-toggle" data-id="${
+                          user.id
+                        }" ${user.state === "active" ? "checked" : ""}>
+                        <span class="slider"></span>
+                        </div>
+                        <div class="toggle-labels">
+                          <span>Pending</span>
+                          <span>Active</span>
+                          </div>
+                      </td>
+                    <td><button class="delete" data-id="${
+                      user.id
+                    }">Delete</button></td>
+                    </tr>`
+                );
+              });
+            },
+            error: function (err) {
+              alert("Error fetching users: " + err.responseJSON.message);
+            },
+          });
+        }
+
+        loadUsers(); //loads users on page load
+
+        //Handle delete button click
+        $("#userTable").on("click", ".delete", function () {
+          var userId = $(this).data("id");
+          $.ajax({
+            type: "DELETE",
+            url: `http://localhost:3000/users/${userId}`,
+            success: function () {
+              alert("User was deleted");
+              loadUsers(); // reloads users after deletion was made
+            },
+            error: function (err) {
+              alert("Error deleting user: " + err.responseJSON.message);
+            },
+          });
+        });
+        //Handle toggle status button
+        $("#userTable").on("change", ".status-toggle", function () {
+          var userId = $(this).data("id");
+          var newStatus = this.checked ? "active" : "pending";
+
+          $.ajax({
+            type: "PUT",
+            url: `http://localhost:3000/users/${userId}`,
+            contentType: "application/json",
+            data: JSON.stringify({ id: userId, state: newStatus }),
+            success: function (updatedUser) {
+              alert("User status updated to " + newStatus); // update the status displayed
+            },
+            error: function (err) {
+              alert("Error updating user status: " + err.responseJSON.message);
+              $(this).prop("checked", !this.checked);
+            }.bind(this),
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Yodlr Admin Page</h1>
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p>
+      <a href="signup.html">Registration Page</a>
+    </p>
+  </body>
+</html>

@@ -43,35 +43,20 @@
 
         loadUsers(); //loads users on page load
 
-        // Handle set as pending button click
-        $("#userTable").on("click", ".set-pending", function () {
+        //Handle status change
+        $("#userTable").on("click", ".change-status", function () {
           var userId = $(this).data("id");
-          $.ajax({
-            type: "PUT",
-            url: `http://localhost:3000/users/${userId}`,
-            data: JSON.stringify({ id: userId, status: "pending" }), // Change status to 'pending'
-            contentType: "application/json",
-            success: function () {
-              alert("User status updated to pending");
-              loadUsers(); // Reload users after status change
-            },
-            error: function (err) {
-              alert("Error updating user status: " + err.responseJSON.message);
-            },
-          });
-        });
+          var currentStatus = $(this).data("status");
+          var newStatus = currentStatus === "active" ? "pending" : "active";
 
-        // Handle set as active button click
-        $("#userTable").on("click", ".set-active", function () {
-          var userId = $(this).data("id");
           $.ajax({
             type: "PUT",
             url: `http://localhost:3000/users/${userId}`,
-            data: JSON.stringify({ id: userId, status: "active" }), // Change status to 'active'
+            data: JSON.stringify({ id: userId, status: newStatus }),
             contentType: "application/json",
             success: function () {
-              alert("User status updated to active");
-              loadUsers(); // Reload users after status change
+              alert("User status was updated to " + newStatus);
+              loadUsers();
             },
             error: function (err) {
               alert("Error updating user status: " + err.responseJSON.message);

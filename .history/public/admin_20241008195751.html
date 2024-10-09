@@ -16,11 +16,6 @@
               tableBody.empty(); // clear the table before adding new rows
 
               users.forEach(function (user) {
-                var statusButtons =
-                  user.status === "active"
-                    ? `<button class="set-pending" data-id="${user.id}">Set as Pending</button>`
-                    : `<button class="set-active" data-id="${user.id}">Set as Active</button>`;
-
                 tableBody.append(
                   `<tr>
                       <td>${user.id}</td>
@@ -28,7 +23,10 @@
                       <td>${user.firstName}</td>
                       <td>${user.lastName}</td>
                       <td>${user.status}</td>
-                      <td>${statusButtons}
+                      <td>
+                          <button class="change-status" data-id="${userId}" data-status="${user.status}">
+                            Change Status
+                          </button>
                       </td>
                       <td><button class="delete" data-id="${user.id}">Delete</button></td>
                       </tr>`
@@ -43,35 +41,20 @@
 
         loadUsers(); //loads users on page load
 
-        // Handle set as pending button click
-        $("#userTable").on("click", ".set-pending", function () {
+        //Handle status change
+        $("#userTable").on("click", ".change-status", function () {
           var userId = $(this).data("id");
-          $.ajax({
-            type: "PUT",
-            url: `http://localhost:3000/users/${userId}`,
-            data: JSON.stringify({ id: userId, status: "pending" }), // Change status to 'pending'
-            contentType: "application/json",
-            success: function () {
-              alert("User status updated to pending");
-              loadUsers(); // Reload users after status change
-            },
-            error: function (err) {
-              alert("Error updating user status: " + err.responseJSON.message);
-            },
-          });
-        });
+          var currentStatus = $(this).data("status");
+          var newStatus = currentStatus === "active" ? "pending" : "active";
 
-        // Handle set as active button click
-        $("#userTable").on("click", ".set-active", function () {
-          var userId = $(this).data("id");
           $.ajax({
             type: "PUT",
             url: `http://localhost:3000/users/${userId}`,
-            data: JSON.stringify({ id: userId, status: "active" }), // Change status to 'active'
+            data: JSON.stringify({ status: newStatus }),
             contentType: "application/json",
             success: function () {
-              alert("User status updated to active");
-              loadUsers(); // Reload users after status change
+              alert("User status was updated to " + newStatus);
+              loadUsers();
             },
             error: function (err) {
               alert("Error updating user status: " + err.responseJSON.message);
