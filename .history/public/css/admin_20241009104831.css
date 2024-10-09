@@ -41,14 +41,6 @@ h1 {
 .btn-action:hover {
   opacity: 0.9;
 }
-.btn-set-inactive {
-  background-color: #e0e0e0;
-  color: #333;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  transition: background-color 0.3s, color 0.3s;
-}
 .text-center {
   margin-top: 20px;
 }
@@ -56,13 +48,4 @@ h1 {
 .btn-outline-secondary {
   border-radius: 20px;
   padding: 10px 20px;
-}
-
-.btn-set-active {
-  background-color: #95ca9e;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  transition: background-color 0.3s, color 0.3s;
 }

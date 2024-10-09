@@ -59,10 +59,5 @@ h1 {
 }
 
 .btn-set-active {
-  background-color: #95ca9e;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  transition: background-color 0.3s, color 0.3s;
+  background-color: #4cd964;
 }
