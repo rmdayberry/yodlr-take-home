@@ -84,23 +84,6 @@
         }
       }
 
-      //Delete user function
-      function deleteUser(userId) {
-        $.ajax({
-          type: "DELETE",
-          url: `http://localhost:3000/users/${userId}`,
-          success: function (response) {
-            console.log("User deleted successfully:", response);
-            //Remove user from array
-            users = users.filter((user) => user.id !== userId);
-            updateUserTable();
-          },
-          error: function (err) {
-            console.error("Error deleting user:", err);
-          },
-        });
-      }
-
       // Render users in the table
       function updateUserTable() {
         const tableBody = $("#userTableBody");
