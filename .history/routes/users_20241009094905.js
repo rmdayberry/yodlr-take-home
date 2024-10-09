@@ -26,12 +26,11 @@ router.post("/", function (req, res) {
 
 /* Get a specific user by id */
 router.get("/:id", function (req, res, next) {
-  var userId = parseInt(req.params.id);
-  var user = users.find((u) => u.id === userId);
+  var user = users[req.params.id];
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return next();
   }
-  res.json(user);
+  res.json(users[req.params.id]);
 });
 
 /* Delete a user by id */
